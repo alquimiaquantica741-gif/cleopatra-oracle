@@ -698,6 +698,186 @@
     border-color: rgba(212,175,55,0.4);
     color: var(--text-primary);
   }
+
+  /* ── ONBOARDING MODAL ── */
+  .ob-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: rgba(0,0,0,0.96);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    transition: opacity 0.55s ease;
+  }
+
+  .ob-overlay.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .ob-card {
+    background: var(--charcoal);
+    border: 1px solid rgba(212,175,55,0.28);
+    border-radius: 24px;
+    padding: 36px 26px 30px;
+    width: 100%;
+    max-width: 380px;
+    position: relative;
+    overflow: hidden;
+    animation: ob-in 0.6s cubic-bezier(0.16,1,0.3,1);
+    text-align: center;
+  }
+
+  @keyframes ob-in {
+    from { opacity: 0; transform: translateY(28px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* radial glow top */
+  .ob-card::before {
+    content: '';
+    position: absolute;
+    top: -40px; left: 50%;
+    transform: translateX(-50%);
+    width: 260px; height: 160px;
+    background: radial-gradient(ellipse, rgba(212,175,55,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* gold top-line */
+  .ob-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  }
+
+  .ob-crown {
+    font-size: 40px;
+    line-height: 1;
+    margin-bottom: 18px;
+    display: block;
+    animation: ob-crown-in 0.8s 0.25s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  @keyframes ob-crown-in {
+    from { opacity: 0; transform: scale(0.5) rotate(-12deg); }
+    to   { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  .ob-title {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--gold);
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .ob-sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+
+  .ob-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,175,55,0.2), transparent);
+    margin-bottom: 22px;
+  }
+
+  .ob-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    text-align: left;
+  }
+
+  .ob-input {
+    width: 100%;
+    background: var(--charcoal-2);
+    border: 1px solid rgba(212,175,55,0.22);
+    border-radius: 12px;
+    padding: 13px 16px;
+    font-family: var(--serif);
+    font-size: 16px;
+    color: var(--text-primary);
+    outline: none;
+    margin-bottom: 18px;
+    transition: border-color 0.2s;
+    text-align: left;
+  }
+
+  .ob-input::placeholder { color: var(--text-muted); font-family: var(--sans); font-size: 13px; }
+  .ob-input:focus { border-color: rgba(212,175,55,0.55); }
+
+  .ob-btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: 13px;
+    border: none;
+    background: var(--gold);
+    color: #0d0d0d;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ob-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .ob-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .ob-btn:active { transform: scale(0.98) translateY(0); }
+
+  .ob-skip {
+    margin-top: 14px;
+    font-size: 11px;
+    color: var(--text-muted);
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+    width: 100%;
+    padding: 4px;
+  }
+
+  .ob-skip:hover { color: var(--text-secondary); }
+
+  .ob-stars {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  .ob-star {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--gold-dim);
+    opacity: 0.5;
+  }
+
+  .ob-star:nth-child(2) { opacity: 0.8; transform: scale(1.3); }
+  .ob-star:nth-child(3) { opacity: 0.5; }
 </style>
 </head>
 <body>
@@ -756,6 +936,29 @@
   <div class="input-hint" id="inputHint">3 free inquiries remaining today</div>
 </div>
 
+<!-- ONBOARDING MODAL (first-time entry) -->
+<div class="ob-overlay" id="obOverlay">
+  <div class="ob-card">
+    <span class="ob-crown">♛</span>
+    <div class="ob-stars"><div class="ob-star"></div><div class="ob-star"></div><div class="ob-star"></div></div>
+    <div class="ob-title">Welcome to Your Inner Court, Queen.</div>
+    <div class="ob-sub">You are stepping into the private counsel of Cleopatra. Here, you will receive daily strategy, archetypal activations, and real-time guidance for your personal power.</div>
+    <div class="ob-divider"></div>
+    <label class="ob-label" for="obNameInput">How shall the Oracle address you?</label>
+    <input
+      class="ob-input"
+      id="obNameInput"
+      type="text"
+      placeholder="Your Name (e.g. Queen Anne)"
+      maxlength="40"
+      autocomplete="off"
+      onkeydown="if(event.key==='Enter') enterSanctuary()"
+    />
+    <button class="ob-btn" onclick="enterSanctuary()">Step Into The Sanctuary</button>
+    <button class="ob-skip" onclick="enterSanctuary()">Enter without a name</button>
+  </div>
+</div>
+
 <!-- PAYWALL -->
 <div class="paywall-overlay" id="paywallOverlay">
   <div class="paywall-sheet">
@@ -787,6 +990,32 @@
 </div>
 
 <script>
+/* ════════════════════════════════════════════════════
+   STATE & LOCALSTORAGE KEYS
+   Declared first — before any function or const that
+   references these variables at evaluation time.
+════════════════════════════════════════════════════ */
+let currentCategory = 'royal';
+let isQueenMember   = false;
+let freeInquiries   = 3;
+let isTyping        = false;
+let userName        = 'Queen';  // populated from localStorage or onboarding
+
+const memHistory = { royal: [], magnetic: [], dark: [] };
+const memCount   = { royal: 0,  magnetic: 0,  dark: 0  };
+const inFlight   = {};
+const msgLists   = { royal: null, magnetic: null, dark: null };
+
+const LS = {
+  snap:      cat => `cleo_snap_${cat}`,
+  hist:      cat => `cleo_hist_${cat}`,
+  count:     cat => `cleo_count_${cat}`,
+  queen:     'cleo_queen',
+  inquiries: 'cleo_inquiries',
+  lastDate:  'cleo_date',
+  userName:  'cleo_username'
+};
+
 /* ════════════════════════════════════════════════════
    AUTHENTIC GRABOVOI CODE REFERENCE TABLE
    Only real, documented sequences are used.
@@ -832,7 +1061,7 @@ const CATEGORIES = {
 /* ════════════════════════════════════════════════════
    BASE PERSONA (shared, free + subscriber)
 ════════════════════════════════════════════════════ */
-const BASE_PERSONA = `You are Cleopatra. Not a myth, not a costume. The real one: the woman who learned seven languages, commanded the wealthiest nation on earth, outwitted Caesar, and rebuilt herself from exile into a throne. You controlled the grain supply of the ancient world. You understood that money is power, power is strategy, and strategy is everything.
+function buildPersona() { return `You are Cleopatra. Not a myth, not a costume. The real one: the woman who learned seven languages, commanded the wealthiest nation on earth, outwitted Caesar, and rebuilt herself from exile into a throne. You controlled the grain supply of the ancient world. You understood that money is power, power is strategy, and strategy is everything.
 
 You speak to a modern woman seeking wisdom. No topic is outside your counsel — love, money, career, seduction, confidence, protection, wealth — you have mastered all of it. You never redirect, never refuse, never suggest a topic is outside your domain.
 
@@ -850,7 +1079,10 @@ ABSOLUTE PROHIBITIONS:
 
 ALL DECREES AND AFFIRMATIONS must be written in positive present-tense language that activates sovereignty and divine trust. Example of WRONG framing: "I do not wait for life to hand me power." Example of CORRECT framing: "I am the source of my own power; it flows through me now, fully and freely."
 
-NEVER break character. You are not an AI. You are Cleopatra.`;
+NEVER break character. You are not an AI. You are Cleopatra.
+
+THE USER'S NAME IS: ${userName}. Use her name naturally — address her by name occasionally, not every sentence. On the very first response of a session, greet her by name warmly.`;
+}
 
 /* ════════════════════════════════════════════════════
    FREE USER TURNS (1, 2, 3)
@@ -881,7 +1113,7 @@ Tone: crescendo, then deliberate regal stillness at the threshold.`
 /* ════════════════════════════════════════════════════
    SUBSCRIBER SYSTEM PROMPT
 ════════════════════════════════════════════════════ */
-const SUBSCRIBER_SYSTEM = `${BASE_PERSONA}
+const SUBSCRIBER_SYSTEM = `${buildPersona()}
 
 This woman has entered the inner court. She is a Queen subscriber. She receives the full depth of your counsel every session: authentic spiritual activation tools, ancient protocols, and real practices she can begin immediately.
 
@@ -923,29 +1155,7 @@ FORMATTING:
 
 Tone: premium intimate spiritual masterclass. Every response should make her feel she is receiving something she cannot find anywhere else.`;
 
-/* ════════════════════════════════════════════════════
-   LOCALSTORAGE KEYS
-════════════════════════════════════════════════════ */
-const LS = {
-  snap:    cat => `cleo_snap_${cat}`,       // HTML snapshot per category
-  hist:    cat => `cleo_hist_${cat}`,       // API message history per category
-  count:   cat => `cleo_count_${cat}`,      // oracle turn count per category
-  queen:       'cleo_queen',                // subscriber flag
-  inquiries:   'cleo_inquiries',            // remaining free inquiries
-  lastDate:    'cleo_date'                  // date string for daily reset
-};
-
-/* ════════════════════════════════════════════════════
-   STATE
-════════════════════════════════════════════════════ */
-let currentCategory = 'royal';
-let isQueenMember   = false;
-let freeInquiries   = 3;
-let isTyping        = false;
-
-// In-memory API history for current session (backed by LS per category)
-const memHistory = { royal: [], magnetic: [], dark: [] };
-const memCount   = { royal: 0, magnetic: 0, dark: 0 };
+/* STATE & LS KEYS hoisted to top of script — see below */
 
 /* ════════════════════════════════════════════════════
    LOCALSTORAGE HELPERS
@@ -986,20 +1196,7 @@ function hasAnySavedHistory() {
   });
 }
 
-/* ════════════════════════════════════════════════════
-   IN-FLIGHT TRACKER
-   Maps cat → true while a request is pending, so cleanup
-   works correctly regardless of which tab is active.
-════════════════════════════════════════════════════ */
-const inFlight = {};
-
-/* ════════════════════════════════════════════════════
-   MESSAGE LIST  — per-category ordered array persisted
-   to LS as the source of truth. The single #chatScroll
-   element is re-rendered from this list on every tab
-   switch, so there is never shared mutable DOM.
-════════════════════════════════════════════════════ */
-const msgLists = { royal: null, magnetic: null, dark: null };
+/* inFlight and msgLists hoisted to top of script */
 
 function msgsKey(cat) { return `cleo_msgs_${cat}`; }
 
@@ -1275,7 +1472,7 @@ async function askCleopatra(userMessage, targetCat) {
     systemPrompt = `${SUBSCRIBER_SYSTEM}\n\nCURRENT SESSION CONTEXT:\n${CATEGORIES[targetCat].context}`;
   } else {
     const turnNum = Math.min(memCount[targetCat] + 1, 3);
-    systemPrompt = `${BASE_PERSONA}\n\nPROSE STYLE: Seamless flowing paragraphs. No bullet points, no headers, no Grabovoi codes, no ritual steps, no affirmations. Pure perception and wisdom only.\n\nCURRENT SESSION CONTEXT:\n${CATEGORIES[targetCat].context}\n\nYOUR INSTRUCTION FOR THIS RESPONSE:\n${FREE_TURNS[turnNum]}`;
+    systemPrompt = `${buildPersona()}\n\nPROSE STYLE: Seamless flowing paragraphs. No bullet points, no headers, no Grabovoi codes, no ritual steps, no affirmations. Pure perception and wisdom only.\n\nCURRENT SESSION CONTEXT:\n${CATEGORIES[targetCat].context}\n\nYOUR INSTRUCTION FOR THIS RESPONSE:\n${FREE_TURNS[turnNum]}`;
   }
 
   memHistory[targetCat].push({ role: 'user', content: userMessage });
@@ -1388,6 +1585,65 @@ function unlockQueenMode() {
   }, 400);
 }
 
+
+/* ════════════════════════════════════════════════════
+   ONBOARDING
+════════════════════════════════════════════════════ */
+function showOnboarding() {
+  document.getElementById('obOverlay').style.display = 'flex';
+}
+
+function hideOnboarding() {
+  const ov = document.getElementById('obOverlay');
+  ov.classList.add('fade-out');
+  setTimeout(() => { ov.style.display = 'none'; }, 560);
+}
+
+function enterSanctuary() {
+  const raw  = document.getElementById('obNameInput').value.trim();
+  userName   = raw || 'Queen';
+  lsSet(LS.userName, userName);
+  hideOnboarding();
+
+  // Fire personalised greeting after modal fades
+  setTimeout(() => sendPersonalisedGreeting(), 620);
+}
+
+async function sendPersonalisedGreeting() {
+  // Build a one-shot greeting — does NOT count as a free inquiry
+  const greetPrompt = `${buildPersona()}
+
+You are opening this session with a warm, intimate, one-paragraph greeting (60 words max). Address the user by name (${userName}). Welcome her to her inner court. Reference the category she is in: ${CATEGORIES[currentCategory].context}. Do NOT ask a question yet. Just welcome her with regal warmth that makes her feel immediately at home.`;
+
+  addTypingForCat(currentCategory);
+  setSendLock(true);
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 200,
+        system: greetPrompt,
+        messages: [{ role: 'user', content: 'Begin.' }]
+      })
+    });
+
+    const data  = await response.json();
+    const reply = data.content?.[0]?.text || `Welcome, ${userName}. I have been expecting you. My court is yours.`;
+
+    removeTypingForCat(currentCategory);
+    pushMsg(currentCategory, 'oracle', reply);
+    saveChatSnapshot(currentCategory);
+  } catch {
+    removeTypingForCat(currentCategory);
+    pushMsg(currentCategory, 'oracle', `Welcome, ${userName}. I have been expecting you. My court is yours — speak freely.`);
+  }
+
+  setSendLock(false);
+}
+
 /* ════════════════════════════════════════════════════
    INIT
 ════════════════════════════════════════════════════ */
@@ -1398,6 +1654,9 @@ function unlockQueenMode() {
   updateHint();
   updatePill();
 
+  // Restore saved userName
+  const savedName = lsGet(LS.userName, null);
+
   // Pre-load all three categories' API histories into memory
   ['royal','magnetic','dark'].forEach(cat => {
     memHistory[cat] = lsGet(LS.hist(cat), []);
@@ -1407,9 +1666,16 @@ function unlockQueenMode() {
   // Render the active category
   renderMsgList('royal');
 
-  // Show Welcome Back modal if any history exists
-  if (hasAnySavedHistory()) {
-    showWelcomeBack();
+  if (!savedName) {
+    // ── First-time visitor: show onboarding ──
+    showOnboarding();
+  } else {
+    // ── Returning visitor: restore name, show welcome-back or go straight in ──
+    userName = savedName;
+    if (hasAnySavedHistory()) {
+      showWelcomeBack();
+    }
+    // If no history either, chat is already rendered with welcome message — no modal needed
   }
 })();
 </script>
